@@ -59,13 +59,15 @@
             border-radius: 8px;
             font-weight: bold;
         }
-        .skull-crossbones {
-            font-size: 80px;
-            color: #000;
+        .skull-row {
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .skull {
+            font-size: 40px;
+            color: #000;
         }
     </style>
 </head>
@@ -83,6 +85,18 @@
             <p><strong>Big Blinds:</strong> <span id="bigBlindsCount"></span></p>
             <p><strong>M Ratio:</strong> <span id="mScore"></span></p>
             <div id="zoneInfo" class="zone-info"></div>
+            <div id="skulls" style="display: none;">
+                <div class="skull-row">
+                    <span class="skull">&#9760;</span>
+                    <span class="skull">&#9760;</span>
+                    <span class="skull">&#9760;</span>
+                </div>
+                <div class="skull-row">
+                    <span class="skull">&#9760;</span>
+                    <span class="skull">&#9760;</span>
+                    <span class="skull">&#9760;</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -112,34 +126,37 @@
             let zoneName = '';
             let strategy = '';
             let backgroundColor = '';
-            let showSkull = false;
+            const skullsElement = document.getElementById('skulls');
 
             if (mScore >= 20) {
                 zoneName = 'Green Zone';
                 strategy = 'Most desirable situation, freedom to play conservatively or aggressively as you choose.';
                 backgroundColor = 'green';
+                skullsElement.style.display = 'none';
             } else if (mScore >= 10) {
                 zoneName = 'Yellow Zone';
                 strategy = 'Must take more risks. Hands containing small pairs and small suited connectors lose value.';
                 backgroundColor = 'yellow';
+                skullsElement.style.display = 'none';
             } else if (mScore >= 6) {
                 zoneName = 'Orange Zone';
                 strategy = 'Main focus is to be first-in whatever you decide to play, important to preserve chips.';
                 backgroundColor = 'orange';
+                skullsElement.style.display = 'none';
             } else if (mScore >= 1) {
                 zoneName = 'Red Zone';
                 strategy = 'Your only move is to move all-in or fold.';
                 backgroundColor = 'red';
+                skullsElement.style.display = 'none';
             } else {
-                showSkull = true;
+                zoneName = 'Dead Zone';
+                strategy = 'You are completely dependent on luck to survive. The only move is to push all-in into an empty pot.';
+                backgroundColor = 'white';
+                skullsElement.style.display = 'block';
             }
 
-            if (showSkull) {
-                document.body.innerHTML = '<div class="skull-crossbones">&#9760;</div>';
-            } else {
-                document.body.style.backgroundColor = backgroundColor;
-                document.getElementById('zoneInfo').innerHTML = `<strong>Zone:</strong> ${zoneName}<br><strong>Strategy:</strong> ${strategy}`;
-            }
+            document.body.style.backgroundColor = backgroundColor;
+            document.getElementById('zoneInfo').innerHTML = `<strong>Zone:</strong> ${zoneName}<br><strong>Strategy:</strong> ${strategy}`;
         }
     </script>
 </body>
