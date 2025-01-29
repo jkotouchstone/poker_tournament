@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Poker Tracker</h1>
+        <input type="number" id="chipCount" placeholder="Enter your current chip count">
+        <input type="number" id="bigBlind" placeholder="Enter the big blind amount">
+        <input type="number" id="smallBlind" placeholder="Enter the small blind amount">
+        <input type="number" id="ante" placeholder="Enter the ante amount">
+        <button onclick="calculateValues()">Calculate</button>
+
+        <div id="results" class="results" style="display: none;">
+            <p><strong>Big Blinds:</strong> <span id="bigBlindsCount"></span></p>
+            <p><strong>M Score:</strong> <span id="mScore"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateValues() {
+            const chipCount = parseFloat(document.getElementById('chipCount').value);
+            const bigBlind = parseFloat(document.getElementById('bigBlind').value);
+            const smallBlind = parseFloat(document.getElementById('smallBlind').value);
+            const ante = parseFloat(document.getElementById('ante').value);
+
+            if (isNaN(chipCount) || isNaN(bigBlind) || isNaN(smallBlind) || isNaN(ante) || bigBlind === 0) {
+                alert('Please enter valid numeric values.');
+                return;
+            }
+
+            const bigBlindsCount = (chipCount / bigBlind).toFixed(2);
+            const mScore = (chipCount / (bigBlind + smallBlind + ante)).toFixed(2);
+
+            document.getElementById('bigBlindsCount').textContent = bigBlindsCount;
+            document.getElementById('mScore').textContent = mScore;
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
