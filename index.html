@@ -14,6 +14,7 @@
             height: 100vh;
             margin: 0;
             padding: 10px;
+            transition: background-color 0.5s ease;
         }
         .card {
             background-color: #fff;
@@ -58,11 +59,20 @@
             border-radius: 8px;
             font-weight: bold;
         }
+        .skull-crossbones {
+            font-size: 80px;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1>The Grinder's Tournament Tracker</h1>
+        <h1>Grind for Stacks</h1>
+        <p><em>grindforstacks.com</em></p>
         <input type="number" id="chipCount" placeholder="Enter your current chip count">
         <input type="number" id="smallBlind" placeholder="Enter the small blind amount">
         <input type="number" id="bigBlind" placeholder="Enter the big blind amount">
@@ -71,7 +81,7 @@
 
         <div id="results" class="results" style="display: none;">
             <p><strong>Big Blinds:</strong> <span id="bigBlindsCount"></span></p>
-            <p><strong>M Score:</strong> <span id="mScore"></span></p>
+            <p><strong>M Ratio:</strong> <span id="mScore"></span></p>
             <div id="zoneInfo" class="zone-info"></div>
         </div>
     </div>
@@ -101,25 +111,35 @@
         function displayZoneInfo(mScore) {
             let zoneName = '';
             let strategy = '';
+            let backgroundColor = '';
+            let showSkull = false;
 
             if (mScore >= 20) {
                 zoneName = 'Green Zone';
                 strategy = 'Most desirable situation, freedom to play conservatively or aggressively as you choose.';
+                backgroundColor = 'green';
             } else if (mScore >= 10) {
                 zoneName = 'Yellow Zone';
                 strategy = 'Must take more risks. Hands containing small pairs and small suited connectors lose value.';
+                backgroundColor = 'yellow';
             } else if (mScore >= 6) {
                 zoneName = 'Orange Zone';
                 strategy = 'Main focus is to be first-in whatever you decide to play, important to preserve chips.';
+                backgroundColor = 'orange';
             } else if (mScore >= 1) {
                 zoneName = 'Red Zone';
                 strategy = 'Your only move is to move all-in or fold.';
+                backgroundColor = 'red';
             } else {
-                zoneName = 'Dead Zone';
-                strategy = 'You are completely dependent on luck to survive. The only move is to push all-in into an empty pot.';
+                showSkull = true;
             }
 
-            document.getElementById('zoneInfo').innerHTML = `<strong>Zone:</strong> ${zoneName}<br><strong>Strategy:</strong> ${strategy}`;
+            if (showSkull) {
+                document.body.innerHTML = '<div class="skull-crossbones">&#9760;</div>';
+            } else {
+                document.body.style.backgroundColor = backgroundColor;
+                document.getElementById('zoneInfo').innerHTML = `<strong>Zone:</strong> ${zoneName}<br><strong>Strategy:</strong> ${strategy}`;
+            }
         }
     </script>
 </body>
