@@ -51,31 +51,39 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+        .zone-info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e0e7ff;
+            border-radius: 8px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1>Poker Tracker</h1>
+        <h1>The Grinder's Tournament Tracker</h1>
         <input type="number" id="chipCount" placeholder="Enter your current chip count">
-        <input type="number" id="bigBlind" placeholder="Enter the big blind amount">
         <input type="number" id="smallBlind" placeholder="Enter the small blind amount">
+        <input type="number" id="bigBlind" placeholder="Enter the big blind amount">
         <input type="number" id="ante" placeholder="Enter the ante amount">
         <button onclick="calculateValues()">Calculate</button>
 
         <div id="results" class="results" style="display: none;">
             <p><strong>Big Blinds:</strong> <span id="bigBlindsCount"></span></p>
             <p><strong>M Score:</strong> <span id="mScore"></span></p>
+            <div id="zoneInfo" class="zone-info"></div>
         </div>
     </div>
 
     <script>
         function calculateValues() {
             const chipCount = parseFloat(document.getElementById('chipCount').value);
-            const bigBlind = parseFloat(document.getElementById('bigBlind').value);
             const smallBlind = parseFloat(document.getElementById('smallBlind').value);
+            const bigBlind = parseFloat(document.getElementById('bigBlind').value);
             const ante = parseFloat(document.getElementById('ante').value);
 
-            if (isNaN(chipCount) || isNaN(bigBlind) || isNaN(smallBlind) || isNaN(ante) || bigBlind === 0) {
+            if (isNaN(chipCount) || isNaN(smallBlind) || isNaN(bigBlind) || isNaN(ante) || bigBlind === 0) {
                 alert('Please enter valid numeric values.');
                 return;
             }
@@ -85,7 +93,33 @@
 
             document.getElementById('bigBlindsCount').textContent = bigBlindsCount;
             document.getElementById('mScore').textContent = mScore;
+
+            displayZoneInfo(parseFloat(mScore));
             document.getElementById('results').style.display = 'block';
+        }
+
+        function displayZoneInfo(mScore) {
+            let zoneName = '';
+            let strategy = '';
+
+            if (mScore >= 20) {
+                zoneName = 'Green Zone';
+                strategy = 'Most desirable situation, freedom to play conservatively or aggressively as you choose.';
+            } else if (mScore >= 10) {
+                zoneName = 'Yellow Zone';
+                strategy = 'Must take more risks. Hands containing small pairs and small suited connectors lose value.';
+            } else if (mScore >= 6) {
+                zoneName = 'Orange Zone';
+                strategy = 'Main focus is to be first-in whatever you decide to play, important to preserve chips.';
+            } else if (mScore >= 1) {
+                zoneName = 'Red Zone';
+                strategy = 'Your only move is to move all-in or fold.';
+            } else {
+                zoneName = 'Dead Zone';
+                strategy = 'You are completely dependent on luck to survive. The only move is to push all-in into an empty pot.';
+            }
+
+            document.getElementById('zoneInfo').innerHTML = `<strong>Zone:</strong> ${zoneName}<br><strong>Strategy:</strong> ${strategy}`;
         }
     </script>
 </body>
